@@ -2,35 +2,26 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
 
-        int zero = 0, one = 0, two = 0;
+        // by using 2 pointer approach :
 
-        // Count frequency
-        for (int x : nums) {
-            if (x == 0)
-                zero++;
-            else if (x == 1)
-                one++;
-            else
-                two++;
-        }
+        int n = nums.size();
 
-        // Fill 0s
-        int i = 0;
-        while (zero--) {
-            nums[i] = 0;
-            i++;
-        }
+        int low = 0, mid = 0, high = (n - 1);
 
-        // Fill 1s
-        while (one--) {
-            nums[i] = 1;
-            i++;
-        }
+        // traverse the array and swap it with corresponding value :
+        // so here if nums[mid]==0 then swap(nums[mid++],nums[low++]);
+        // so here if nums[mid]==1 then mid++;
+        // so here if nums[mid]==2 then swap(nums[mid++],nums[high--]);
 
-        // Fill 2s
-        while (two--) {
-            nums[i] = 2;
-            i++;
+        while (mid <= high) {
+
+            if (nums[mid] == 0) {
+                swap(nums[mid++], nums[low++]);
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else {
+                swap(nums[mid], nums[high--]);
+            }
         }
     }
 };
