@@ -2,23 +2,35 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
 
-        vector<int> zero, one, two, ans;
+        int zero = 0, one = 0, two = 0;
 
-        for (int i = 0; i < nums.size(); i++) {
-
-            if (nums[i] == 0) {
-                zero.push_back(nums[i]);
-            } else if (nums[i] == 1) {
-                one.push_back(nums[i]);
-            } else {
-                two.push_back(nums[i]);
-            }
+        // Count frequency
+        for (int x : nums) {
+            if (x == 0)
+                zero++;
+            else if (x == 1)
+                one++;
+            else
+                two++;
         }
 
-        nums.clear();
+        // Fill 0s
+        int i = 0;
+        while (zero--) {
+            nums[i] = 0;
+            i++;
+        }
 
-        nums.insert(nums.end(), zero.begin(), zero.end());
-        nums.insert(nums.end(), one.begin(), one.end());
-        nums.insert(nums.end(), two.begin(), two.end());
+        // Fill 1s
+        while (one--) {
+            nums[i] = 1;
+            i++;
+        }
+
+        // Fill 2s
+        while (two--) {
+            nums[i] = 2;
+            i++;
+        }
     }
 };
