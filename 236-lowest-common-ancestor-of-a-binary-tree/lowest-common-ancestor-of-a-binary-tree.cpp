@@ -10,66 +10,44 @@
 
 class Solution {
 public:
-
     // Approach:
-    // 1. Find the path from root to node p and store it in path1.
-    // 2. Find the path from root to node q and store it in path2.
-    // 3. Both paths start from the root.
-    // 4. Compare path1 and path2 from the beginning.
-    // 5. The last common node is the Lowest Common Ancestor.
-    
-    bool findPath(TreeNode* root, vector<TreeNode*>& path, TreeNode* target) {
-        
-        // If root is NULL, target cannot be found.
-        if(root == NULL) 
-            return false;
-
-        // Add current node to the path.
-        path.push_back(root);
-
-        // If current node is the target, path is complete.
-        if(root == target) 
-            return true;
-
-        // Search in left and right subtree.
-        // If target is found in either subtree, keep the path.
-        if(findPath(root->left, path, target) || 
-           findPath(root->right, path, target)) {
-            return true;
-        }
-
-        // Target was not found through this node,
-        // so remove it while backtracking.
-        path.pop_back();
-
-        return false;
-    }
+    // 1. If root is NULL, return NULL.
+    // 2. If root is either p or q, return root.
+    // 3. Recursively search for p and q in the left and right subtrees.
+    // 4. If both left and right return a node, p and q are in different
+    //    subtrees, so the current root is their LCA.
+    // 5. If only one side returns a node, return that node.
+    // 6. If neither side returns a node, return NULL.
 
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        
-        vector<TreeNode*> path1, path2;
 
-        // Find root -> p path and root -> q path.
-        // If either node doesn't exist, return NULL.
-        if (!findPath(root, path1, p) || 
-            !findPath(root, path2, q)) {
+        // Base case: tree is empty
+        if (root == NULL)
             return NULL;
-        }
 
-        TreeNode* ans = NULL;
+        // If current node is p or q,
+        // current node can be the LCA
+        if (root == p || root == q)
+            return root;
 
-        // Compare both paths from the root.
-        // The last node having the same address in both paths
-        // is the Lowest Common Ancestor.
-        for (int i = 0; 
-             i < path1.size() && i < path2.size(); 
-             i++) {
+        // Search for p and q in the left subtree
+        TreeNode* left_LCA = lowestCommonAncestor(root->left, p, q);
 
-            if (path1[i] == path2[i]) {
-                ans = path1[i];
-            }
-        }
+        // Search for p and q in the right subtree
+        TreeNode* right_LCA = lowestCommonAncestor(root->right, p, q);
 
-        return ans;
+        // One node found in left subtree and the other
+        // found in right subtree
+        if (left_LCA != NULL && right_LCA != NULL)
+            return root;
+
+        // Both nodes are present in the left subtree
+        if (left_LCA != NULL)
+            return left_LCA;
+
+        // Both nodes are present in the right subtree,
+        // or neither node was found
+        else
+            return right_LCA;
     }
 };
